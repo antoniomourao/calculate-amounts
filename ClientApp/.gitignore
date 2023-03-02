@@ -10,7 +10,9 @@
 /node_modules
 
 # IDEs and editors
+ClientApp/.angular
 /.idea
+.angular
 .project
 .classpath
 .c9/
