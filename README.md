@@ -1,4 +1,4 @@
-
+ 
 #Calculate Amount
 
 This solution was setup by running dotnet command: 
@@ -7,15 +7,16 @@ dotnet new angular -o calculate-amount
 ````
 
 ## Run Application
-First build 
+On VS Code terminal run the following commands:
+To do the first build run: 
 ```
 dotnet build
 ```
-To run the application
+To run the application run:
 ```
 dotnet run
 ```
-note: it's required to click on one of the URLs listed in order to open the application.
+note: right bellow the above command there will be listed some URLs, just click on the first one to open in a browser. That will launch the SPA and the application will start in some seconds
 
 ## Setup Technical Requirements
 Update Angular to the latest version:
