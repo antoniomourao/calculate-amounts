@@ -1,3 +1,4 @@
+
 #Calculate Amount
 
 This solution was setup by running dotnet command: 
