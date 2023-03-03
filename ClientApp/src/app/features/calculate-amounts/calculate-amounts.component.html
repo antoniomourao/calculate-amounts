@@ -1,12 +1,13 @@
 <div class="container">
   <div class="title">
-  <h1 >{{ title }}</h1>
+  <h1>{{ title }}</h1>
 </div>
   <div>
     <form [formGroup]="form">
       <mat-form-field appearance="outline" class="field">
         <mat-label>Select Country</mat-label>
         <mat-select
+          class="selectCountry"
           formControlName="country"
           (selectionChange)="onCountryChange()"
         >
@@ -18,7 +19,7 @@
         </mat-select>
       </mat-form-field>
 
-      <div class="field" *ngIf="selectedCountry">
+      <div class="selectVatRate field" *ngIf="selectedCountry">
         <mat-label appearance="outline">Select Vat Rate</mat-label>
         <mat-radio-group
           aria-label="Select an option"
@@ -34,7 +35,7 @@
       </div>
 
       <ng-container *ngIf="currentVatRate$ | async">
-        <mat-card>
+        <mat-card class="selectInputAmounts">
           <mat-card-content>
             <mat-label appearance="outline">Select input field</mat-label>
 
