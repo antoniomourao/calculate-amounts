@@ -1,0 +1,128 @@
+<div class="container">
+  <div class="title">
+  <h1 >{{ title }}</h1>
+</div>
+  <div>
+    <form [formGroup]="form">
+      <mat-form-field appearance="outline" class="field">
+        <mat-label>Select Country</mat-label>
+        <mat-select
+          formControlName="country"
+          (selectionChange)="onCountryChange()"
+        >
+          <mat-option
+            *ngFor="let country of countryList$ | async"
+            [value]="country"
+            >{{ country.name }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+
+      <div class="field" *ngIf="selectedCountry">
+        <mat-label appearance="outline">Select Vat Rate</mat-label>
+        <mat-radio-group
+          aria-label="Select an option"
+          formControlName="vatRate"
+          (change)="onVatRateChange()"
+        >
+          <mat-radio-button
+            *ngFor="let vatRate of vatRatesList$ | async"
+            [value]="vatRate"
+            >{{ vatRate * 100 }}%</mat-radio-button
+          >
+        </mat-radio-group>
+      </div>
+
+      <ng-container *ngIf="currentVatRate$ | async">
+        <mat-card>
+          <mat-card-content>
+            <mat-label appearance="outline">Select input field</mat-label>
+
+            <mat-button-toggle-group
+              #group="matButtonToggleGroup"
+              formControlName="amountInput"
+            >
+              <mat-button-toggle
+                color="primary"
+                value="price"
+                (change)="onValChange($event.value)"
+                matTooltip="Enable Price for input"
+              >
+                Price
+              </mat-button-toggle>
+
+              <mat-button-toggle
+                color="primary"
+                value="vatValue"
+                (change)="onValChange($event.value)"
+                matTooltip="Enable Value-Added Tax for input"
+              >
+                Value-Added Tax
+              </mat-button-toggle>
+
+              <mat-button-toggle
+                color="primary"
+                value="priceWithVat"
+                (change)="onValChange($event.value)"
+                matTooltip="Enable Price With Vat for input"
+              >
+                Price Inc. VAT
+              </mat-button-toggle>
+            </mat-button-toggle-group>
+
+            <mat-form-field appearance="outline" class="field"
+                [class.field-readonly]="priceIsDisabled$ | async"
+            >
+              <mat-label>Price</mat-label>
+              <input
+                matInput
+                formControlName="price"
+                placeholder="0"
+                [readonly]="priceIsDisabled$ | async"
+              />
+              <span matTextPrefix>{{ selectedCountry.currency }}&nbsp;</span>
+
+              <mat-error *ngIf="priceValidationErrors">
+                {{ priceValidationErrors }}
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="field"
+                [class.field-readonly]="vatValueIsDisabled$ | async"
+            >
+              <mat-label
+                >Value-Added Tax {{ selectedVatRate * 100 }}%</mat-label
+              >
+              <input
+                matInput
+                formControlName="vatValue"
+                placeholder="0"
+                [readonly]="vatValueIsDisabled$ | async"
+              />
+              <span matTextPrefix>{{ selectedCountry.currency }}&nbsp;</span>
+              <mat-error *ngIf="vatValueValidationErrors">
+                {{ vatValueValidationErrors }}
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="field"
+                [class.field-readonly]="priceWithVatIsDisabled$ | async"
+            >
+              <mat-label>Price Inc. VAT</mat-label>
+              <input
+                matInput
+                formControlName="priceWithVat"
+                placeholder="0"
+                [readonly]="priceWithVatIsDisabled$ | async"
+              />
+              <span matTextPrefix>{{ selectedCountry.currency }}&nbsp;</span>
+              <mat-error *ngIf="priceWithVatValidationErrors">
+                {{ priceWithVatValidationErrors }}
+              </mat-error>
+            </mat-form-field>
+          </mat-card-content>
+        </mat-card>
+      </ng-container>
+    </form>
+  </div>
+</div>
