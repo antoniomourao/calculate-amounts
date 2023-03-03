@@ -25,7 +25,7 @@ export class CalculateUtils {
     if (!isNaN(value) && !isNaN(taxValue) && value > 0 && taxValue > 0) {
       amounts.price = this.roundToTwoNumber(value);
       amounts.vatValue = this.roundToTwoNumber(amounts.price * taxValue);
-      amounts.priceWithVat = amounts.price + amounts.vatValue;
+      amounts.priceWithVat = this.roundToTwoNumber(amounts.price + amounts.vatValue);
     }
 
     return amounts;
@@ -50,7 +50,7 @@ export class CalculateUtils {
       amounts.price = this.roundToTwoNumber(
         (amounts.vatValue * 100) / (taxValue * 100)
       );
-      amounts.priceWithVat = amounts.price + amounts.vatValue;
+      amounts.priceWithVat = this.roundToTwoNumber(amounts.price + amounts.vatValue);
     }
 
     return amounts;
@@ -80,7 +80,7 @@ export class CalculateUtils {
       amounts.vatValue = this.roundToTwoNumber(
         (amounts.priceWithVat * (taxValue * 100)) / taxTotal
       );
-      amounts.price = amounts.priceWithVat - amounts.vatValue;
+      amounts.price = this.roundToTwoNumber(amounts.priceWithVat - amounts.vatValue);
     }
 
     return amounts;

@@ -57,4 +57,21 @@ describe('Calculate Utils', () => {
     );
     expect(result).toEqual(expectedResult);
   });
+
+
+  it('RQ05 - Should calculate Price With Vat and round to 2 decimals', () => {
+    const taxValue = 0.06;
+    const expectedResult: IAmounts = {
+      price: 241.46,
+      vatValue: 14.49,
+      priceWithVat: 255.95,
+    };
+
+    const result = CalculateUtils.fromPrice(
+      expectedResult.price,
+      taxValue
+    );
+    expect(result).toEqual(expectedResult);
+  });
+
 });
