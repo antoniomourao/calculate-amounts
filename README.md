@@ -1,5 +1,5 @@
  
-#Calculate Amount
+# Calculate Amount
 
 This solution was setup by running dotnet command: 
 ```
@@ -30,7 +30,7 @@ Install [Angular Material](https://material.angular.io/)
 ng add @angular/material
 ```
 
-#.NET Core Project
+# .NET Core Project
 In order to have the controllers working it was required to changed this file 'ClientApp/proxy.conf.js' and set context to "api":
 ```js
     context: [
