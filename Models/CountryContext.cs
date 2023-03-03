@@ -12,7 +12,7 @@ public class CountryContext
             Name = "Austria",
             Flag = "au",
             Currency = "€",
-            Vats = new int[] { 5, 10, 13, 20 },
+            VatRates = new float[] { 0.05f, 0.10f, 0.13f, 0.20f },
             DecimalPlaces = 2
         });
         CountryItems.Add(new Country()
@@ -20,7 +20,7 @@ public class CountryContext
             Name = "United Kingdom",
             Flag = "uk",
             Currency = "£",
-            Vats = new int[] { 5, 20 },
+            VatRates = new float[] { 0.05f, 0.20f },
             DecimalPlaces = 2,
         });
         CountryItems.Add(new Country()
@@ -28,7 +28,7 @@ public class CountryContext
             Name = "Portugal",
             Flag = "pt",
             Currency = "€",
-            Vats = new int[] { 6, 13, 23 },
+            VatRates = new float[] { 0.06f, 0.13f, 0.23f },
             DecimalPlaces = 2,
         });
         CountryItems.Add(new Country()
@@ -36,7 +36,7 @@ public class CountryContext
             Name = "Singapore",
             Flag = "sg",
             Currency = "$",
-            Vats = new int[] { 7 },
+            VatRates = new float[] { 0.07f },
             DecimalPlaces = 2,
         });
     }

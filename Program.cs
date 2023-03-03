@@ -1,7 +1,9 @@
+using calculate_amounts.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+builder.Services.AddSingleton<CountryContext>(new CountryContext());
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
