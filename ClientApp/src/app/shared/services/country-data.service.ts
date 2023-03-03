@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { BehaviorSubject, pipe, take } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { ICountry } from '..';
 
 @Injectable({
@@ -17,6 +17,12 @@ export class CountryDataService {
     return this._countryList$;
   }
 
+  /**
+   * Call server and populate country list
+   *
+   * @param http
+   * @param baseUrl
+   */
   constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
     const ret = http.request('GET', baseUrl + 'api/countryitems');
     http
