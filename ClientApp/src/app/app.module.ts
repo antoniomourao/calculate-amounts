@@ -8,7 +8,7 @@ import { AppComponent } from './app.component';
 import { CalculateAmountsComponent } from './features/calculate-amounts/calculate-amounts.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DecimalPipe } from '@angular/common';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatRadioModule } from '@angular/material/radio';
@@ -37,6 +37,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
     MatInputModule,
     MatRadioModule,
     MatCardModule,
+    DecimalPipe,
   ],
   providers: [CalculateAmountsService],
   bootstrap: [AppComponent],

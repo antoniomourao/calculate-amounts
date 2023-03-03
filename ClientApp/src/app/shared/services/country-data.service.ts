@@ -1,7 +1,7 @@
-import { HttpClient } from "@angular/common/http";
-import { Inject, Injectable } from "@angular/core";
-import { BehaviorSubject } from "rxjs";
-import { ICountry } from "..";
+import { HttpClient } from '@angular/common/http';
+import { Inject, Injectable } from '@angular/core';
+import { BehaviorSubject, pipe, take } from 'rxjs';
+import { ICountry } from '..';
 
 @Injectable({
   providedIn: 'root',
@@ -18,13 +18,14 @@ export class CountryDataService {
   }
 
   constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
-
-    http.get<ICountry[]>(baseUrl + 'api/countryitems').subscribe(
-      {
+    const ret = http.request('GET', baseUrl + 'api/countryitems');
+    http
+      .get<ICountry[]>(baseUrl + 'api/countryitems')
+      .subscribe({
         next: (result) => {
           this._countryList$.next(result);
         },
-        error: (error) => console.error(error)
+        error: (error) => console.error(error),
       });
   }
 }

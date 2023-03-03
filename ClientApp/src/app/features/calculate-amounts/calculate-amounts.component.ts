@@ -1,11 +1,16 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import {
   FormBuilder,
   FormControl,
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import {
   CALCULATE_MAPPER,
   CustomNumericValidator,
@@ -20,7 +25,8 @@ import { CalculateAmountsService } from './calculate-amounts.service';
   styleUrls: ['./calculate-amounts.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CalculateAmountsComponent implements OnInit {
+export class CalculateAmountsComponent implements OnInit, OnDestroy {
+  private _subscriptions: Subscription;
   /** list of vat rates from selected country */
   private _vatRatesList$: BehaviorSubject<number[]> = new BehaviorSubject<
     number[]
@@ -128,7 +134,7 @@ export class CalculateAmountsComponent implements OnInit {
   /**
    * Creates an instance of CalculateAmountsComponent.
    * Initiate form group controls
-   * - vatRate
+   * - amountInput set to 'price' (default)
    *
    * @param {FormBuilder} fb
    * @param {CalculateAmountsService} service
@@ -138,6 +144,8 @@ export class CalculateAmountsComponent implements OnInit {
     private readonly fb: FormBuilder,
     private readonly service: CalculateAmountsService
   ) {
+    this._subscriptions = new Subscription();
+
     this.form = this.fb.group({
       country: new FormControl(''),
       vatRate: new FormControl(''),
@@ -145,7 +153,7 @@ export class CalculateAmountsComponent implements OnInit {
       price: new FormControl('', [
         Validators.required,
         CustomNumericValidator.numeric,
-        Validators.min(0),
+        Validators.min(0.1),
       ]),
       vatValue: new FormControl('', [
         Validators.required,
@@ -161,30 +169,39 @@ export class CalculateAmountsComponent implements OnInit {
   }
 
   /**
-   *
+   * Subscribe to form changes to perform calculations
    *
    */
   public ngOnInit(): void {
-    this.form.valueChanges.subscribe((values) => {
-      let amounts: IAmounts = {
-        price: !isNaN(values.price) ? +values.price : 0,
-        vatValue: !isNaN(values.vatValue) ? +values.vatValue : 0,
-        priceWithVat: !isNaN(values.priceWithVat) ? +values.priceWithVat : 0,
-      };
-      console.log('Fire Changes');
-      if (values.amountInput && values.vatRate) {
-        amounts = CALCULATE_MAPPER[values.amountInput](amounts, values.vatRate);
+    this._subscriptions.add(
+      this.form.valueChanges.subscribe((values) => {
+        let amounts: IAmounts = {
+          price: !isNaN(values.price) ? +values.price : 0,
+          vatValue: !isNaN(values.vatValue) ? +values.vatValue : 0,
+          priceWithVat: !isNaN(values.priceWithVat) ? +values.priceWithVat : 0,
+        };
+        if (values.amountInput && values.vatRate) {
+          amounts = CALCULATE_MAPPER[values.amountInput](
+            amounts,
+            values.vatRate
+          );
 
-        this.form.controls.price.patchValue(amounts.price, {
-          emitEvent: false,
-        });
-        this.form.controls.vatValue.patchValue(amounts.vatValue, {
-          emitEvent: false,
-        });
-        this.form.controls.priceWithVat.patchValue(amounts.priceWithVat, {
-          emitEvent: false,
-        });
-      }
-    });
+          this.form.controls.price.patchValue(amounts.price, {
+            emitEvent: false,
+          });
+          this.form.controls.vatValue.patchValue(amounts.vatValue, {
+            emitEvent: false,
+          });
+          this.form.controls.priceWithVat.patchValue(amounts.priceWithVat, {
+            emitEvent: false,
+          });
+        }
+      })
+    );
+  }
+
+  /** Clean before leaving */
+  public ngOnDestroy() {
+    this._subscriptions.unsubscribe();
   }
 }

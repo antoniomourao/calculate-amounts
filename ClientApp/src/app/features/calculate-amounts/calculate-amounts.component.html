@@ -28,7 +28,7 @@
           <mat-radio-button
             *ngFor="let vatRate of vatRatesList$ | async"
             [value]="vatRate"
-            >{{ vatRate * 100 }}%</mat-radio-button
+            >{{ vatRate * 100 | number }}%</mat-radio-button
           >
         </mat-radio-group>
       </div>
@@ -91,7 +91,7 @@
                 [class.field-readonly]="vatValueIsDisabled$ | async"
             >
               <mat-label
-                >Value-Added Tax {{ selectedVatRate * 100 }}%</mat-label
+                >Value-Added Tax {{ selectedVatRate * 100  | number }}%</mat-label
               >
               <input
                 matInput
