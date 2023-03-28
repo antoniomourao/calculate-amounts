@@ -1,4 +1,4 @@
-import { AbstractControl } from "@angular/forms";
+import { AbstractControl } from '@angular/forms';
 
 export class CustomNumericValidator {
   /**
@@ -12,7 +12,7 @@ export class CustomNumericValidator {
 
     if (val === null || val === '') return null;
 
-    if (!val.toString().match(/^[0-9]+(\.?[0-9]+)?$/))
+    if (!val.toString().match(/^[0-9]+(\.?[0-9]+)?\d{0,2}$/))
       return { numeric: true };
 
     return null;

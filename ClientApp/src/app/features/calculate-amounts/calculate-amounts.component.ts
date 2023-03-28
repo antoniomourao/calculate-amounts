@@ -28,14 +28,9 @@ import { CalculateAmountsService } from './calculate-amounts.service';
 export class CalculateAmountsComponent implements OnInit, OnDestroy {
   private _subscriptions: Subscription;
   /** list of vat rates from selected country */
-  private _vatRatesList$: BehaviorSubject<number[]> = new BehaviorSubject<
-    number[]
-  >([]);
+  private _vatRatesList: number[] = [];
   /** user selected tax rate */
-  private _currentVatRate$: BehaviorSubject<number | null> =
-    new BehaviorSubject<number | null>(null);
-  private _currentInputField$: BehaviorSubject<string> =
-    new BehaviorSubject<string>('price');
+  private _currentVatRate: number | null = null;
   /** check numeric field validations */
   private numericValidationErrors(field: string): string {
     let errors = [];
@@ -68,14 +63,14 @@ export class CalculateAmountsComponent implements OnInit, OnDestroy {
   }
 
   /** list of country VAT taxes */
-  public get vatRatesList$(): BehaviorSubject<number[]> {
-    return this._vatRatesList$;
+  public get vatRatesList(): number[] {
+    return this._vatRatesList;
   }
 
   /** on country selection changed */
   public onCountryChange(): void {
-    this._vatRatesList$.next(this.selectedCountry.vatRates);
-    this._currentVatRate$.next(null);
+    this._vatRatesList = this.selectedCountry.vatRates;
+    this._currentVatRate = null;
   }
 
   /** selected country */
@@ -85,51 +80,47 @@ export class CalculateAmountsComponent implements OnInit, OnDestroy {
 
   /** on vat rate selection change */
   public onVatRateChange(): void {
-    this._currentVatRate$.next(this.selectedVatRate);
+    this._currentVatRate = this.selectedVatRate;
   }
 
   /** selected VAT rate */
-  public get currentVatRate$(): BehaviorSubject<number | null> {
-    return this._currentVatRate$;
+  public get currentVatRate(): number | null {
+    return this._currentVatRate;
   }
 
   /** form group */
   public form: FormGroup;
 
   /** price validation errors */
-  public get priceValidationErrors(): string {
+  public priceValidationErrors(): string {
     return this.numericValidationErrors('price');
   }
 
   /** vat value validation errors */
-  public get vatValueValidationErrors(): string {
+  public vatValueValidationErrors(): string {
     return this.numericValidationErrors('vatValue');
   }
 
   /** price with vat validation errors */
-  public get priceWithVatValidationErrors(): string {
+  public priceWithVatValidationErrors(): string {
     return this.numericValidationErrors('priceWithVat');
   }
 
   /** input field selection changed */
   public onValChange(value: string): void {
-    this._currentInputField$.next(value);
-    this.priceIsDisabled$.next(value !== 'price');
-    this.vatValueIsDisabled$.next(value !== 'vatValue');
-    this.priceWithVatIsDisabled$.next(value !== 'priceWithVat');
+    this.priceIsDisabled = value !== 'price';
+    this.vatValueIsDisabled = value !== 'vatValue';
+    this.priceWithVatIsDisabled = value !== 'priceWithVat';
   }
 
   /** sets price field disabled */
-  public priceIsDisabled$: BehaviorSubject<boolean> =
-    new BehaviorSubject<boolean>(false);
+  public priceIsDisabled = false;
 
   /** sets vat value field disabled */
-  public vatValueIsDisabled$: BehaviorSubject<boolean> =
-    new BehaviorSubject<boolean>(true);
+  public vatValueIsDisabled = true;
 
   /** sets price with vat field disabled */
-  public priceWithVatIsDisabled$: BehaviorSubject<boolean> =
-    new BehaviorSubject<boolean>(true);
+  public priceWithVatIsDisabled = true;
 
   /**
    * Creates an instance of CalculateAmountsComponent.
@@ -153,12 +144,12 @@ export class CalculateAmountsComponent implements OnInit, OnDestroy {
       price: new FormControl('', [
         Validators.required,
         CustomNumericValidator.numeric,
-        Validators.min(0.1),
+        Validators.min(0.01),
       ]),
       vatValue: new FormControl('', [
         Validators.required,
         CustomNumericValidator.numeric,
-        Validators.min(0),
+        Validators.min(0.01),
       ]),
       priceWithVat: new FormControl('', [
         Validators.required,
@@ -175,6 +166,14 @@ export class CalculateAmountsComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     this._subscriptions.add(
       this.form.valueChanges.subscribe((values) => {
+        const hasError =
+          isNaN(values.price) || isNaN(values.vatValue) ? true : false;
+        if (hasError) {
+          this.form.controls[values.amountInput].setErrors(
+            { numeric: true },
+            { emitEvent: false }
+          );
+        }
         let amounts: IAmounts = {
           price: !isNaN(values.price) ? +values.price : 0,
           vatValue: !isNaN(values.vatValue) ? +values.vatValue : 0,
