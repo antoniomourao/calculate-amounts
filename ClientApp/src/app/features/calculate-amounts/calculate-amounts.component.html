@@ -27,14 +27,14 @@
           (change)="onVatRateChange()"
         >
           <mat-radio-button
-            *ngFor="let vatRate of vatRatesList$ | async"
+            *ngFor="let vatRate of vatRatesList"
             [value]="vatRate"
             >{{ vatRate * 100 | number }}%</mat-radio-button
           >
         </mat-radio-group>
       </div>
 
-      <ng-container *ngIf="currentVatRate$ | async">
+      <ng-container *ngIf="currentVatRate">
         <mat-card class="selectInputAmounts">
           <mat-card-content>
             <mat-label appearance="outline">Select input field</mat-label>
@@ -74,27 +74,27 @@
             <mat-form-field
               appearance="outline"
               class="field"
-              [class.field-readonly]="priceIsDisabled$ | async"
+              [class.field-readonly]="priceIsDisabled"
             >
               <mat-label>Price</mat-label>
               <input
-              class="priceInput"
+                class="priceInput"
                 matInput
                 formControlName="price"
                 placeholder="0"
-                [readonly]="priceIsDisabled$ | async"
+                [readonly]="priceIsDisabled"
               />
               <span matTextPrefix>{{ selectedCountry.currency }}&nbsp;</span>
 
-              <mat-error *ngIf="priceValidationErrors">
-                {{ priceValidationErrors }}
+              <mat-error *ngIf="priceValidationErrors()">
+                {{ priceValidationErrors() }}
               </mat-error>
             </mat-form-field>
 
             <mat-form-field
               appearance="outline"
               class="field"
-              [class.field-readonly]="vatValueIsDisabled$ | async"
+              [class.field-readonly]="vatValueIsDisabled"
             >
               <mat-label
                 >Value-Added Tax
@@ -105,18 +105,18 @@
                 matInput
                 formControlName="vatValue"
                 placeholder="0"
-                [readonly]="vatValueIsDisabled$ | async"
+                [readonly]="vatValueIsDisabled"
               />
               <span matTextPrefix>{{ selectedCountry.currency }}&nbsp;</span>
-              <mat-error *ngIf="vatValueValidationErrors">
-                {{ vatValueValidationErrors }}
+              <mat-error *ngIf="vatValueValidationErrors()">
+                {{ vatValueValidationErrors() }}
               </mat-error>
             </mat-form-field>
 
             <mat-form-field
               appearance="outline"
               class="field"
-              [class.field-readonly]="priceWithVatIsDisabled$ | async"
+              [class.field-readonly]="priceWithVatIsDisabled"
             >
               <mat-label>Price Inc. VAT</mat-label>
               <input
@@ -124,11 +124,11 @@
                 matInput
                 formControlName="priceWithVat"
                 placeholder="0"
-                [readonly]="priceWithVatIsDisabled$ | async"
+                [readonly]="priceWithVatIsDisabled"
               />
               <span matTextPrefix>{{ selectedCountry.currency }}&nbsp;</span>
-              <mat-error *ngIf="priceWithVatValidationErrors">
-                {{ priceWithVatValidationErrors }}
+              <mat-error *ngIf="priceWithVatValidationErrors()">
+                {{ priceWithVatValidationErrors() }}
               </mat-error>
             </mat-form-field>
           </mat-card-content>

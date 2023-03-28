@@ -1,7 +1,7 @@
-import { IAmounts } from "../interfaces";
-import { CalculateUtils } from "./calculate.util";
+import { IAmounts } from '../interfaces';
+import { CalculateUtils } from './calculate.util';
 
-export const CALCULATE_MAPPER: {[index: string]: any} = {
+export const CALCULATE_MAPPER: { [index: string]: any } = {
   ['price']: (amounts: IAmounts, taxRate: number): IAmounts => {
     return CalculateUtils.fromPrice(amounts.price, taxRate);
   },

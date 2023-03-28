@@ -4,16 +4,10 @@ import {
   ComponentFixture,
   fakeAsync,
   TestBed,
-  flush,
 } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { AppModule } from 'src/app/app.module';
-import {
-  CalculateUtils,
-  CountryDataService,
-  IAmounts,
-  ICountry,
-} from 'src/app/shared';
+import { CalculateUtils, CountryDataService, IAmounts } from 'src/app/shared';
 import { MockCountryDataService } from 'src/app/shared/tests/mock-country-data.service';
 
 import { CalculateAmountsComponent } from './calculate-amounts.component';
@@ -93,11 +87,9 @@ describe('Calculate Amounts Component', () => {
     component.onCountryChange();
 
     /** check if vat taxes are loaded */
-    component.vatRatesList$.subscribe((items) => {
-      expect(items.length).toEqual(
-        mockCountryDataService.mockCountryList[0].vatRates.length
-      );
-    });
+    expect(component.vatRatesList.length).toEqual(
+      mockCountryDataService.mockCountryList[0].vatRates.length
+    );
 
     const vatSelection = debugElement.query(By.css('.selectVatRate'));
     const selectInputAmounts = debugElement.query(
@@ -184,17 +176,25 @@ describe('Calculate Amounts Component', () => {
     expect(vatSelection).toBeDefined();
     expect(selectInputAmounts).toBeDefined();
 
-    const priceInput = debugElement.query(By.css('.priceInput')).nativeElement;
-    const vatValueInput = debugElement.query(
-      By.css('.vatValueInput')
-    ).nativeElement;
-    const priceWithVatInput = debugElement.query(
-      By.css('.priceWithVatInput')
-    ).nativeElement;
+    expect(component.priceIsDisabled).toBeFalsy();
+    expect(component.currentVatRate).toBeDefined();
 
-    expect(priceInput.readOnly).toBeFalsy();
-    expect(vatValueInput.readOnly).toBeTruthy();
-    expect(priceWithVatInput.readOnly).toBeTruthy();
+    fixture.whenStable().then(() => {
+      fixture.detectChanges();
+      const priceInput = debugElement.query(
+        By.css('.priceInput')
+      ).nativeElement;
+      const vatValueInput = debugElement.query(
+        By.css('.vatValueInput')
+      ).nativeElement;
+      const priceWithVatInput = debugElement.query(
+        By.css('.priceWithVatInput')
+      ).nativeElement;
+
+      expect(priceInput.readOnly).toBeFalsy();
+      expect(vatValueInput.readOnly).toBeTruthy();
+      expect(priceWithVatInput.readOnly).toBeTruthy();
+    });
   }));
 
   it('RQ05 - Should allow input VAT Value and have Price and Price With VAT calculated', fakeAsync(() => {
@@ -246,17 +246,23 @@ describe('Calculate Amounts Component', () => {
     expect(vatSelection).toBeDefined();
     expect(selectInputAmounts).toBeDefined();
 
-    const priceInput = debugElement.query(By.css('.priceInput')).nativeElement;
-    const vatValueInput = debugElement.query(
-      By.css('.vatValueInput')
-    ).nativeElement;
-    const priceWithVatInput = debugElement.query(
-      By.css('.priceWithVatInput')
-    ).nativeElement;
+    fixture.whenStable().then(() => {
+      fixture.detectChanges();
 
-    expect(priceInput.readOnly).toBeTruthy();
-    expect(vatValueInput.readOnly).toBeFalsy();
-    expect(priceWithVatInput.readOnly).toBeTruthy();
+      const priceInput = debugElement.query(
+        By.css('.priceInput')
+      ).nativeElement;
+      const vatValueInput = debugElement.query(
+        By.css('.vatValueInput')
+      ).nativeElement;
+      const priceWithVatInput = debugElement.query(
+        By.css('.priceWithVatInput')
+      ).nativeElement;
+
+      expect(priceInput.readOnly).toBeTruthy();
+      expect(vatValueInput.readOnly).toBeFalsy();
+      expect(priceWithVatInput.readOnly).toBeTruthy();
+    });
   }));
 
   it('RQ06 - Should allow input Price With Vat Value and have Price and VAT calculated', fakeAsync(() => {
@@ -311,16 +317,21 @@ describe('Calculate Amounts Component', () => {
     expect(vatSelection).toBeDefined();
     expect(selectInputAmounts).toBeDefined();
 
-    const priceInput = debugElement.query(By.css('.priceInput')).nativeElement;
-    const vatValueInput = debugElement.query(
-      By.css('.vatValueInput')
-    ).nativeElement;
-    const priceWithVatInput = debugElement.query(
-      By.css('.priceWithVatInput')
-    ).nativeElement;
+    fixture.whenStable().then(() => {
+      fixture.detectChanges();
+      const priceInput = debugElement.query(
+        By.css('.priceInput')
+      ).nativeElement;
+      const vatValueInput = debugElement.query(
+        By.css('.vatValueInput')
+      ).nativeElement;
+      const priceWithVatInput = debugElement.query(
+        By.css('.priceWithVatInput')
+      ).nativeElement;
 
-    expect(priceInput.readOnly).toBeTruthy();
-    expect(vatValueInput.readOnly).toBeTruthy();
-    expect(priceWithVatInput.readOnly).toBeFalsy();
+      expect(priceInput.readOnly).toBeTruthy();
+      expect(vatValueInput.readOnly).toBeTruthy();
+      expect(priceWithVatInput.readOnly).toBeFalsy();
+    });
   }));
 });
